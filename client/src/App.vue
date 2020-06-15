@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <img alt="Vue logo" src="./assets/logo.png">
-            <h2 class="col-12 text-center">Welcome to Remindy: Organize your timers and get tasks done!</h2>
+            <h2 class="col-12 text-center">Welcome to Mind Reminder: Organize your timers and get reminded!</h2>
             <h1 class="col-12 display-5 text-info text-center">Current time {{ presentTime }}</h1> 
             <!-- <app-timer/> -->
         </div>
