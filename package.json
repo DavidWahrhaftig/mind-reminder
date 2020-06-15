@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DavidWahrhaftig/minder-reminder.git"
+    "url": "git+https://github.com/DavidWahrhaftig/mind-reminder.git"
   },
   "author": "David Wahrhaftig",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/DavidWahrhaftig/minder-reminder/issues"
+    "url": "https://github.com/DavidWahrhaftig/mind-reminder/issues"
   },
-  "homepage": "https://github.com/DavidWahrhaftig/minder-reminder#readme"
+  "homepage": "https://github.com/DavidWahrhaftig/mind-reminder#readme"
 }
