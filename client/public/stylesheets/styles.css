@@ -1,0 +1,14 @@
+.daily-timer {
+    background: rgb(202, 224, 231);
+    border: solid 0.2rem lightskyblue;
+}
+
+.timerNameInput {
+    border: none;
+    padding: 0;
+    margin: 0;
+    background: none;
+    outline: none;
+    width:100%;
+}
+
