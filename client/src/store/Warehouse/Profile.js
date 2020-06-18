@@ -1,21 +1,20 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+// import axios from 'axios';
+import Vue from 'vue';
 
-Vue.use(Vuex)
-
-export const store = new Vuex.Store({
-  state: {
+const state = {
     dailyTimers: []
-  },
-  getters: {
+};
+
+const getters = {
     getDailyTimers: (state) => {
         return state.dailyTimers;
     },
     getDailyTimerByIndex: (state) => (index) => {
         return state.dailyTimers[index];
     }
-  },
-  mutations: {
+};
+
+const mutations = {
     addDailyTimer(state, date) {
         let hour = ('0' + date.getHours() % 24).slice(-2);
         let minutes = ('0' + date.getMinutes() % 60).slice(-2);
@@ -43,5 +42,15 @@ export const store = new Vuex.Store({
         console.log(state.dailyTimers[index]);
         state.dailyTimers.splice(index, 1);
     }
-  }
-})
+};
+
+const actions = {
+
+};
+
+export default {
+    state,
+    getters,
+    mutations,
+    actions,
+}
