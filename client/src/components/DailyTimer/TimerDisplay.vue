@@ -10,26 +10,26 @@
                     {{ displayTimeRemaining }}
                 </h5> -->
             </h4>
-            <div class="row">
+            <div class="row ">
                 <!-- Timer Settings -->
                 <div class="col-9">
-                    <div class="row">
+                    <div class="row justify-content-center">
                         From <div class="settings">{{ timer.start }}</div> 
                         To <div class="settings">{{ timer.end }}</div> 
                         Every <div class="settings">{{ timer.period }}</div> min
                     </div>
-                    <h2 class="row p-0 mt-1 justify-content-center align-self-center"
+                    <h2 class="row p-1 justify-content-center align-self-center"
                         v-if="showTimer">
                         {{ displayTimeRemaining }}
                     </h2>
-                    <h5 class="row p-0 justify-content-center align-self-center"
-                        v-else>
+                    <h4 class="row p-2 justify-content-center align-self-center"
+                        v-if="!showTimer && timer.enabled">
                         {{ statusMessage }}
-                    </h5>
-                    <h1 class="row p-0 justify-content-center align-self-center"
+                    </h4>
+                    <h2 class="row p-2 justify-content-center align-self-center"
                         v-if="!timer.enabled">
                         <i class="fas fa-ban"></i>
-                    </h1>
+                    </h2>
                 </div>
                 <!-- Edit Button and On Switch -->
                 <div class="col-3 pr-0">

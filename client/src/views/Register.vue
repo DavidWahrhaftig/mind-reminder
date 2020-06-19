@@ -1,6 +1,6 @@
 <template>
   <div>
-      <div class="row mt-4">
+      <div class="row mt-1">
           <div class="card mx-auto">
               <div class="card-header text-white bg-primary">
                   <h4>Register</h4>
@@ -19,7 +19,7 @@
                                     v-model="username"/>
                         </div>
                         <!-- name -->
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                           <label for="username">Name</label>
                           <input 
                                 class="form-control"
@@ -28,7 +28,7 @@
                                 placeholder="Name" 
                                 name="name"
                                 v-model="name"/>
-                        </div>
+                        </div> -->
                         <!-- email -->
                         <div class="form-group">
                             <label for="username">Email</label>
@@ -100,7 +100,7 @@ export default {
             };
 
             let res = await this.register(user);
-            if (res.data.success) {
+            if (res && res.data.success) {
                 this.$router.push('/login');
             }
         }

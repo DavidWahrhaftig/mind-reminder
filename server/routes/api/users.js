@@ -17,7 +17,7 @@ const User = require('../../model/User');
  */
 router.post('/register', async (req, res) => {
     let { 
-        name, 
+        // name, 
         username, 
         email, 
         password, 
@@ -79,7 +79,7 @@ router.post('/register', async (req, res) => {
     // The data is valid and new user can be registered
     
     let newUser = new User({
-        name,
+        // name,
         username,
         password,
         email
@@ -126,7 +126,7 @@ router.post('/login', (req, res) => {
                         // User's password is correct and send the JSON Token for that user    
                         const payload = {
                             _id: user._id,
-                            name: user.name,
+                            // name: user.name,
                             email: user.email,
                             username: user.username
                         }

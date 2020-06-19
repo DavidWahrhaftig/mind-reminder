@@ -84,12 +84,12 @@ export default {
 <style scoped>
     .card {
         width: 60%;
-        border-radius: 0;
+        /* border-radius: 0; */
     }
     .btn {
-        border-radius: 0;
+        /* border-radius: 0; */
     }
     .form-control {
-        border-radius: 0;
+        /* border-radius: 0; */
     }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <h1 class="row display-5 text-info text-center">
-            Good to see you {{ user.name }} 
+            Good to see you {{ user.username }} 
         </h1>
         <h1 class="row display-5 text-info text-center">
             Current time {{ presentTime }} 

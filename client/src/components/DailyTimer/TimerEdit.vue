@@ -1,32 +1,26 @@
 <template>
-    <div>
-        <h3 class="px-2 py-0 ml-1" style="display:flex;">
+    <div class="mx-2 mx-lg-2" style="overflow: hidden;">
+        <h3 class="py-0" style="display:flex;">
             <span class="mr-3" style="flex:2">Name: </span>
             <input style="overflow: visible;" placeholder="timer name..." class="timerNameInput" v-model="newName" type="text"/>
         </h3>
          
-        <div class="form-group my-0 row justify-content-center">
-            <!-- <div class="col-12">
-                <div class="row justify-content-center"> 
-                    <label class="col-4 align-self-center">Timer Name: </label>
-                    <input v-model="timer.name" class="form-control col-5" type="text"/>
-                </div>
-            </div> -->
-            <div class="col-sm-12 col-lg-4" >
+        <div class="form-group my-0 row justify-content-start">
+            <div class="col-12 col-xl-4  pr-xl-0" >
                 <label>From: </label>
                 <input type="time" 
                 class="form-control" 
                 placeholder="Select time"
                 v-model="newStartTime"/>
             </div>
-            <div class="col-sm-12 col-lg-4">
+            <div class="col-12 col-xl-4 pr-xl-0">
                 <label>To:</label>
                 <input type="time" 
                 class="form-control" 
                 placeholder="Select time"
                 v-model="newEndTime"/>
             </div>
-            <div class="col-sm-6 col-lg-3">
+            <div class="col-6 col-xl-4">
                 <label>Every:</label>
                 <div>
                     <input class="form-control" type="number" min="0" max="59" 
@@ -53,11 +47,11 @@
                         v-model="activityStatus"> Disabled
                 </label>
             </div> -->
-        <div class="ml-2">
-            <button class="btn btn-success d-inline" @click="updateTimer(editedTimer)">
+        <div class="float-right mt-0 mt-lg-2">
+            <button class="btn btn-success mr-1" @click="updateTimer(editedTimer)">
                 <i class="fas fa-save"></i>
             </button>
-            <button class="btn btn-danger d-inline m-1" @click="removeTimer">
+            <button class="btn btn-danger" @click="removeTimer">
                 <i class="fas fa-trash-alt"></i>
             </button>
         </div>        
