@@ -83,7 +83,7 @@ const actions = {
                 // Set the axios defaults
                 console.log("before axios.defaults.headers....");
                 axios.defaults.headers.common['Authorization'] = token;
-                commit('auth_success', {token: token, user: res.data.user}); // call the mutation auth_success with the given arguments
+                commit('auth_success', {token, user: userRecieved}); // call the mutation auth_success with the given arguments
             }
             return res;
         } catch(err) {

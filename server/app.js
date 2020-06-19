@@ -51,9 +51,9 @@ const timers = require('./routes/api/timers');
 app.use('/api/timers', timers);
 
 app.get('*', (req, res) => {
-    // console.log(path.join(__dirname, 'public/index.html'));
-    //res.sendFile(path.join(__dirname, 'public/index.html'))
-})
+    console.log(path.join(__dirname, 'public/index.html'));
+    res.sendFile(path.join(__dirname, 'public/index.html'));
+});
 
 // // Handle production 
 // if(process.env.NODE_ENV === 'production') {

@@ -1,22 +1,24 @@
 <template>
     <div class="col-4">  
-        <div class="mx-1 my-2 rounded daily-timer py-2">      
-            <app-timer-edit
+        <div class="mx-1 my-2 rounded py-2" :class="[{'timer-on': timer.enabled}, {'timer-off': !timer.enabled}, {'timer-edit': editMode}]">      
+            <transition enter-active-class="animate__animated animate__fadeIn"
+                        leave-active-class="animate__animated animate__fadeOut"
+                        mode="out-in">
+            <timer-edit
                 :timer="timer"
-                :index="index"
                 :updateTimer="updateTimer"
                 :removeTimer="removeTimer"
                 v-if="editMode"/>
-            <app-timer-display
+            <timer-display
                 :timer="timer"
                 :showTimer="showTimer"
                 :timeRemainingInSeconds="timeRemaining"
-                :index="index"
                 :updateTimer="updateTimer"
                 @enable="activateTimer"
                 @disable="stopTimer"
                 @edit="edit" 
-                v-else/>
+                v-else/>     
+            </transition>
         </div>       
     </div>
 </template>
@@ -27,17 +29,16 @@ import TimerEdit from './TimerEdit.vue';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
-    props: ['timer', 'index'],
+    props: ['timer'],
     components: {
-        appTimerDisplay: TimerDisplay,
-        appTimerEdit: TimerEdit
+        TimerDisplay,
+        TimerEdit
     },
     data() {
         return {
             timeRemaining: 1,
             editMode: false,
             showTimer: false,
-            //activated: false,
             intervalID: '',
             timeoutID: '',
             alarm: new Audio(require('../../../public/audios/harp-strumming.mp3'))
@@ -55,12 +56,7 @@ export default {
                 hour: Number(this.timer.end.substring(0,2)), 
                 minutes: Number(this.timer.end.substring(3,5))
             }
-        },
-        // displayRemainingTime(){
-        //     let minutes = Math.floor(this.timeRemaining / 60);
-        //     let seconds = ('0' + this.timeRemaining % 60).slice(-2);
-        //     return `${minutes} : ${seconds}`;
-        // }        
+        }     
     },
     methods: {
         ...mapGetters([
@@ -73,26 +69,25 @@ export default {
         ]),
         async updateTimer(editedTimer) {
 
-            //  update database 
-            let res = await this.update(
-                {
-                    id: this.timer._id,
-                    timer: editedTimer
-            });
+            //  update document in database 
+            let res = await this.update({id: this.timer._id, timer: editedTimer});
+
             if (res.data.success) {
                 this.editMode = false;
-                this.activateTimer();
+                
+                // get timers
+                await this.getTimers();
+                
+                // 
+                if (this.timer.enabled) {
+                    this.activateTimer();
+                } else {
+                    this.stopTimer();
+                }
             }
-            // get timers
-            await this.getTimers();
-
-            // // trigger save to switch between Edit to Display of timer
-            // this.$emit("save");
         },
         async removeTimer() {
             await this.remove(this.timer._id);
-
-            // get timers
             await this.getTimers();
         },
         beginTimer() {
@@ -127,8 +122,12 @@ export default {
         },
         activateTimer() {
             // either begin timer or set a future call
+            // this.stopTimer();
             clearInterval(this.intervalID);
             clearTimeout(this.timeoutID);
+            // don't activate if not enabled
+            console.log("activateTimer - enabled: "+this.timer.enabled);
+
             
             let date = new Date();
             if (isOn(date, this.startBound, this.endBound)) {
@@ -159,19 +158,14 @@ export default {
         }
     },
     created() {
-        this.activateTimer();
-        // console.log(this.isNew()(this.timer._id));
-        // this.editMode = this.isNew()(this.timer._id);
-        // this.editMode = this.timer.isNew;
-
+        if (this.timer.enabled) {
+            this.activateTimer();
+        }
         this.editMode = this.isNew()(this.timer._id);
 
         console.log("Created Timer");
         console.log("New Timer: "+ this.isNew()(this.timer._id));
     },
-    // updated() {
-    //     this.editMode = this.isNew()(this.timer._id);
-    // },
     beforeDestroy() {
         clearInterval(this.intervalID);
         clearTimeout(this.timeoutID);
@@ -264,3 +258,44 @@ When to clear setTimeout
 */
 
 </script>
+
+<style scoped>
+    /* .timer-on {
+        background: rgb(202, 224, 231);
+        border: solid 0.2rem lightskyblue;
+    }
+
+    .timer-off {
+        background: rgb(202, 224, 231);
+        border: solid 0.2rem lightgoldenrodyellow;
+    } */
+    /* .class:hover {
+        animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+        transform: translate3d(0, 0, 0);
+        backface-visibility: hidden;
+        perspective: 1000px;
+    } */
+
+    @keyframes shake {
+        10%, 90% {
+            transform: translate3d(-1px, 0, 0);
+        }
+
+        20%, 80% {
+            transform: translate3d(2px, 0, 0);
+        }
+
+        30%, 50%, 70% {
+            transform: translate3d(-4px, 0, 0);
+        }
+
+        40%, 60% {
+            transform: translate3d(4px, 0, 0);
+        }
+    }
+
+    /* This only changes this particular animation duration */
+    .animate__animated.animate__fadeIn, .animate__animated.animate__fadeOut  {
+        --animate-duration: 0.5s;
+    }
+</style>

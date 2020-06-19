@@ -7,7 +7,7 @@
             Current time {{ presentTime }} 
         </h1>
         <hr>
-        <button class="btn btn-info btn-lg" @click="createTimer">Create Daily Timer</button>
+        <button class="btn btn-info btn-lg" @click="createTimer">Create Daily Timer <i class="fas fa-stopwatch"></i></button>
         <timer-grid v-if="timers" :timers="timers"/>
     </div>
 </template>
@@ -28,6 +28,7 @@ export default {
     },
     methods: {
         ...mapActions([
+            'getUser',
             'getTimers',
             'create'
 
@@ -68,6 +69,8 @@ export default {
     },
     async created() {
         this.setPresentTime();
+        // get user info
+
         // get timers from database
         await this.getTimers();
         // if (res.success) {

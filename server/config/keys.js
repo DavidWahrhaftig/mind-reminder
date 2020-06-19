@@ -2,7 +2,7 @@
 if (process.env.NODE_ENV === 'production') {
     module.exports = { 
         mongoURI: process.env.DATABASEURL,
-        secret: 'yoursecret'
+        secret: process.env.SECRETKEY
     }
 } else {
     module.exports = { 

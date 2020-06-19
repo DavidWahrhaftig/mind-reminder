@@ -14,11 +14,11 @@
                         Home
                         </router-link>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <router-link to="/about" class="nav-link">
                         About
                         </router-link>
-                    </li>
+                    </li> -->
                     <li class="nav-item" v-if="!isLoggedIn">
                         <router-link to="/login" class="nav-link">
                         Login

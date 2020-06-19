@@ -161,11 +161,51 @@ router.get('/profile', passport.authenticate('jwt',
     {
         session: false
     }), (req, res) => {
+        console.log("Profile Get Request");
         return res.json({
             user: req.user      
         });
 });
+// router.get('/profile', verifyToken, (req, res) => {
+//     jwt.verify(req.token, key, (err, authData) => {
+//         if(err) {
+//             res.sendStatus(403);
+//             console.log("forbidden 2");
+//         } else {
+//             // find user 
+//             User.findById(authData._id).then(user => {
+//                 res.status(200).json({
+//                     success: true,
+//                     user,
+//                     msg: 'User Found',
+//                 });
+//             }).catch(err => {
+//                 res.status(404).json({
+//                     success: false,
+//                     msg: err.message
+//                 });
+//             });
+//         }
+//     });
+// });
 
+// // FORMAT OF TOKEN 
+// // Authorization: Bearer <access_token>
+// function verifyToken(req, res, next) {
+//     const bearerHeader = req.headers['authorization']; // needs to be 'authorization' and not 'Authorization'
+
+//     if(typeof bearerHeader !== 'undefined') {
+//         const bearer = bearerHeader.split(' ');
+//         // Get token 
+//         const bearerToken = bearer[1];
+//         req.token = bearerToken;
+//         next();
+//     } else {
+//         // Forbidden
+//         console.log("forbidden 1");
+//         res.sendStatus(403);
+//     }
+// }
 
 
 

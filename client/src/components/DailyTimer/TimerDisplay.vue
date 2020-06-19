@@ -18,10 +18,18 @@
                         To <div class="settings">{{ timer.end }}</div> 
                         Every <div class="settings">{{ timer.period }}</div> min
                     </div>
-                    <h2 class="row p-0 mt-1 justify-content-center align-self-center" 
+                    <h2 class="row p-0 mt-1 justify-content-center align-self-center"
                         v-if="showTimer">
                         {{ displayTimeRemaining }}
                     </h2>
+                    <h5 class="row p-0 justify-content-center align-self-center"
+                        v-else>
+                        {{ statusMessage }}
+                    </h5>
+                    <h1 class="row p-0 justify-content-center align-self-center"
+                        v-if="!timer.enabled">
+                        <i class="fas fa-ban"></i>
+                    </h1>
                 </div>
                 <!-- Edit Button and On Switch -->
                 <div class="col-3 pr-0">
@@ -30,9 +38,9 @@
                         <i class="fas fa-edit"></i>
                     </button>
                     <div class="onoffswitch">
-                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" :id="`myonoffswitch${index}`" tabindex="0" 
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" :id="`myonoffswitch${timer._id}`" tabindex="0" 
                             v-model="enabled">
-                        <label class="onoffswitch-label" :for="`myonoffswitch${index}`">
+                        <label class="onoffswitch-label" :for="`myonoffswitch${timer._id}`">
                             <span class="onoffswitch-inner"></span>
                             <!-- <span class="onoffswitch-switch"></span> -->
                         </label>
@@ -62,17 +70,25 @@ export default {
             let minutes = Math.floor(this.timeRemainingInSeconds / 60);
             let seconds = ('0' + this.timeRemainingInSeconds % 60).slice(-2);
             return `${minutes} : ${seconds}`;
+        },
+        statusMessage(){
+            // time is on and future call is activated
+            if (this.timer.enabled) return `I'll start at ${this.timer.start}`;
+            return `` 
         }
     },
     watch: {
         enabled(newValue, oldValue) {
             console.log("New Value: " + newValue);
             console.log("Old Value: " + oldValue);
-            if (newValue) {
-                this.$emit('enable');
-            } else {
-                this.$emit('disable');
-            }
+            this.updateTimer({enabled: newValue}, oldValue, newValue)
+            // if (res.data.success) {
+            //     if (newValue) this.$emit('enable');
+            //     else this.$emit('disable');
+            // } else {
+            //     this.enabled = oldValue;
+            //     // revertback 
+            // }            
         }
     },
     created() {
