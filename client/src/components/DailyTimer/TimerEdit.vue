@@ -54,10 +54,10 @@
                 </label>
             </div> -->
         <div class="ml-2">
-            <button class="btn btn-success d-inline" @click="save()">
+            <button class="btn btn-success d-inline" @click="updateTimer(editedTimer)">
                 <i class="fas fa-save"></i>
             </button>
-            <button class="btn btn-danger d-inline m-1" @click="removeTimer(index)">
+            <button class="btn btn-danger d-inline m-1" @click="removeTimer">
                 <i class="fas fa-trash-alt"></i>
             </button>
         </div>        
@@ -66,10 +66,11 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+// import { mapActions } from 'vuex';
+// import { mapMutations } from 'vuex';
 
 export default {
-    props: ['timer', 'index'],
+    props: ['timer', 'updateTimer', 'removeTimer'],
     data() {
         return {
             newStartTime: '',
@@ -78,36 +79,52 @@ export default {
             newName: ''
         }
     },
-    methods: {
-        ...mapMutations ([
-            'updateTimer',
-            'removeTimer'
-        ]),
-        save() {
-            const newValues = {
-                startTime: this.newStartTime,
-                endTime: this.newEndTime,
+    computed: {
+        editedTimer() {
+            return {
+                start: this.newStartTime,
+                end: this.newEndTime,
                 period: Number(this.newPeriod),
-                name: this.newName
-                // startTime: this.timer.startTime,
-                // endTime: this.timer.endTime,
-                // period: Number(this.timer.period),
-                // name: this.timer.name
+                name: this.newName,
+                enabled: this.timer.enabled
             }
-            //  update database 
-            this.updateTimer(
-                {
-                    index: this.index, 
-                    timer: newValues
-            });
-            // trigger save to switch between Edit to Display of timer
-            this.$emit("save");
         }
+    },
+    methods: {
+        // ...mapActions([
+        //     'update',
+        //     'remove',
+        //     'getTimers'
+        // ]),
+        // async updateTimer() {
+        //     const updatedTimer = {
+        //         start: this.newStartTime,
+        //         end: this.newEndTime,
+        //         period: Number(this.newPeriod),
+        //         name: this.newName,
+        //         enabled: this.timer.enabled
+        //     }
+        //     //  update database 
+        //     await this.update(
+        //         {
+        //             id: this.timer._id,
+        //             timer: updatedTimer
+        //     });
+
+        //     // get timers
+        //     await this.getTimers();
+
+        //     // // trigger save to switch between Edit to Display of timer
+        //     // this.$emit("save");
+        // },
+        // async removeTimer() {
+        //     // let res = await remove(this.timer._id);
+        // }
     },
     created() {
         console.log("Created TimerEdit");
-        this.newStartTime = this.timer.startTime;
-        this.newEndTime = this.timer.endTime;
+        this.newStartTime = this.timer.start;
+        this.newEndTime = this.timer.end;
         this.newPeriod = this.timer.period;
         this.newName = this.timer.name;
     }

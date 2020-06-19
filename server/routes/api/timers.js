@@ -37,6 +37,7 @@ router.get('/', verifyToken,(req, res) => {
             // find user 
             User.findById(authData._id).populate('timers').then(user => {
                 const timers = user.timers;
+                // console.log("In Timers Get Request");
                 res.status(200).json({
                     success: true,
                     timers,
@@ -69,9 +70,18 @@ router.post('/', verifyToken,(req, res) => {
             User.findById(authData._id).populate('timers').then(user => {
                 // create new Timer
                 // const newTimer = req.body.timer;
-                console.log(req.body.timer)
-                Timer.create(req.body.timer).then(newTimer => {
+                const timer = {
+                    start: req.body.start,
+                    end: req.body.end,
+                    period: req.body.period,
+                    name: req.body.name,
+                }
+                console.log("Creating New Timer");
+                console.log(timer);
+                Timer.create(timer).then(newTimer => {
                     // add timer to user and save
+                    console.log("after Creating timer before sending status");
+                    console.log(newTimer);
                     user.timers.push(newTimer);
                     user.save();
                     // send response
@@ -81,7 +91,7 @@ router.post('/', verifyToken,(req, res) => {
                         msg: 'Created New Timer!',
                     });
                 }).catch(err => {
-                    res.status(404).json({
+                    res.status(400).json({
                         success: false,
                         msg: err.message
                     });
@@ -109,6 +119,8 @@ router.put('/', verifyToken,(req, res) => {
         } else {
             // maybe need to find user to ensure the right user is updating their timers
             // find timer
+            console.log('updating timer');
+            console.log(req.body);
             Timer.findByIdAndUpdate(req.body.id, req.body.timer, {new: true}).then(updatedTimer => {
                 res.status(200).json({
                     success: true,
@@ -140,6 +152,8 @@ router.delete('/', verifyToken,(req, res) => {
             // find timer
             // doesn't remove from User.timers array in Users collection
             // Remove timer from user's timers array
+            console.log("Deleting, showing req.body")
+            console.log(req.body);
             Timer.findByIdAndRemove(req.body.id).then(removedTimer => {
                 // find User
                 // User.update({} , {$pull: {timers: removedTimer._id}});

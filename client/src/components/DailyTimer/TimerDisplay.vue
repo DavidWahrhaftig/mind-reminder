@@ -14,8 +14,8 @@
                 <!-- Timer Settings -->
                 <div class="col-9">
                     <div class="row">
-                        From <div class="settings">{{ timer.startTime }}</div> 
-                        To <div class="settings">{{ timer.endTime }}</div> 
+                        From <div class="settings">{{ timer.start }}</div> 
+                        To <div class="settings">{{ timer.end }}</div> 
                         Every <div class="settings">{{ timer.period }}</div> min
                     </div>
                     <h2 class="row p-0 mt-1 justify-content-center align-self-center" 
@@ -49,7 +49,8 @@ export default {
            'timer',
            'showTimer',
            'timeRemainingInSeconds',
-           'index'
+           'index',
+           'updateTimer'
      ],
      data() {
          return {

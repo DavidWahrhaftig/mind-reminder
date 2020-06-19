@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <app-timer class="col-xs-12 col-md-6 col-lg-4" 
-                   v-for="(timer, i) in getDailyTimers" :key="timer.key"
+                   v-for="(timer, i) in timers" :key="timer._id"
                    :timer="timer"
                    :index="i"
                    />
@@ -9,16 +9,17 @@
 </template>
 
 <script>
-import Timer from './Timer.vue';
-import { mapGetters } from 'vuex';
+import Timer from './DailyTimer/Timer.vue';
+// import { mapGetters } from 'vuex';
 export default {
+    props: ['timers'],
     components: {
         appTimer: Timer
     },
-    computed: {
-        ...mapGetters([
-            'getDailyTimers'
-        ]),
-    }
+    // computed: {
+    //     ...mapGetters([
+    //         'getDailyTimers'
+    //     ]),
+    // }
 }
 </script>

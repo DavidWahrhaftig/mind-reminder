@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import store from '../store';
+import { store } from '../store';
 
 Vue.use(VueRouter)
 
@@ -74,4 +74,4 @@ router.beforeEach((to, from, next) => {
     }
 });
 
-export default router
+export default router;

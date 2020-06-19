@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const TimerSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        default: ''
     },
     start: {
         type: String,
@@ -16,7 +16,7 @@ const TimerSchema = new mongoose.Schema({
     },
     period: {
         type: Number,
-        required: true
+        default: 1
     },
     enabled: {
         type: Boolean,

@@ -4,13 +4,15 @@
             <app-timer-edit
                 :timer="timer"
                 :index="index"
-                @save="save"
-                v-if="!saved"/>
+                :updateTimer="updateTimer"
+                :removeTimer="removeTimer"
+                v-if="editMode"/>
             <app-timer-display
                 :timer="timer"
                 :showTimer="showTimer"
                 :timeRemainingInSeconds="timeRemaining"
                 :index="index"
+                :updateTimer="updateTimer"
                 @enable="activateTimer"
                 @disable="stopTimer"
                 @edit="edit" 
@@ -22,6 +24,7 @@
 <script>
 import TimerDisplay from './TimerDisplay.vue';
 import TimerEdit from './TimerEdit.vue';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
     props: ['timer', 'index'],
@@ -32,25 +35,25 @@ export default {
     data() {
         return {
             timeRemaining: 1,
-            saved: false,
+            editMode: false,
             showTimer: false,
             //activated: false,
             intervalID: '',
             timeoutID: '',
-            alarm: new Audio(require('../../public/audios/harp-strumming.mp3'))
+            alarm: new Audio(require('../../../public/audios/harp-strumming.mp3'))
         }
     },
     computed: {
         startBound() {
             return {
-                hour: Number(this.timer.startTime.substring(0,2)), 
-                minutes: Number(this.timer.startTime.substring(3,5))
+                hour: Number(this.timer.start.substring(0,2)), 
+                minutes: Number(this.timer.start.substring(3,5))
             }
         },
         endBound() {
             return {
-                hour: Number(this.timer.endTime.substring(0,2)), 
-                minutes: Number(this.timer.endTime.substring(3,5))
+                hour: Number(this.timer.end.substring(0,2)), 
+                minutes: Number(this.timer.end.substring(3,5))
             }
         },
         // displayRemainingTime(){
@@ -60,6 +63,38 @@ export default {
         // }        
     },
     methods: {
+        ...mapGetters([
+            'isNew'
+        ]),
+        ...mapActions([
+            'getTimers',
+            'update',
+            'remove'
+        ]),
+        async updateTimer(editedTimer) {
+
+            //  update database 
+            let res = await this.update(
+                {
+                    id: this.timer._id,
+                    timer: editedTimer
+            });
+            if (res.data.success) {
+                this.editMode = false;
+                this.activateTimer();
+            }
+            // get timers
+            await this.getTimers();
+
+            // // trigger save to switch between Edit to Display of timer
+            // this.$emit("save");
+        },
+        async removeTimer() {
+            await this.remove(this.timer._id);
+
+            // get timers
+            await this.getTimers();
+        },
         beginTimer() {
             let date = new Date();
             // check current time lays in boundry of timer 
@@ -87,12 +122,8 @@ export default {
             console.log('Stopped Timer');
         },
         edit() {
-            this.saved = false;
+            this.editMode = true;
             this.stopTimer();
-        },
-        save() { 
-            this.saved = true;
-            this.activateTimer();
         },
         activateTimer() {
             // either begin timer or set a future call
@@ -129,8 +160,18 @@ export default {
     },
     created() {
         this.activateTimer();
+        // console.log(this.isNew()(this.timer._id));
+        // this.editMode = this.isNew()(this.timer._id);
+        // this.editMode = this.timer.isNew;
+
+        this.editMode = this.isNew()(this.timer._id);
+
         console.log("Created Timer");
+        console.log("New Timer: "+ this.isNew()(this.timer._id));
     },
+    // updated() {
+    //     this.editMode = this.isNew()(this.timer._id);
+    // },
     beforeDestroy() {
         clearInterval(this.intervalID);
         clearTimeout(this.timeoutID);

@@ -1,68 +1,29 @@
 <template>
   <div id="app">
+    <Navbar/>
+    <br>
+    <br>
     <div class="container">
-        <div class="row justify-content-center">
-            <img alt="Vue logo" src="./assets/logo.png">
-            <h2 class="col-12 text-center">Welcome to Mind Reminder: Organize your timers and get reminded!</h2>
-            <h1 class="col-12 display-5 text-info text-center">Current time {{ presentTime }}</h1> 
-            <!-- <app-timer/> -->
-        </div>
-        <hr>
-        <button class="btn btn-info btn-lg" @click="addDailyTimer(now)">Create Daily Timer</button>
-        <app-timer-grid />
-        <!-- <div ref="dailyTimerContainer" class="row justify-content-around">
-        </div> -->
+        <Errors v-if="error" :msg="error" /> 
+        <router-view/>
     </div>
   </div>
 </template>
 
 <script>
-import TimerGrid from './components/TimerGrid.vue';
-import { mapMutations } from 'vuex'; 
+import Navbar from './components/Navbar.vue';
+import Errors from './components/Errors.vue';
+import { mapGetters } from 'vuex';
 
 export default {
-    name: 'App',
     components: {
-        appTimerGrid: TimerGrid
-    },
-    data() {
-        return {
-            now: '',
-        }
-    },
-    methods: {
-        ...mapMutations([
-            'addDailyTimer'
-        ]),
-        setPresentTime(){
-            this.now = new Date();
-            setInterval(() => {
-                // let currentTime = new Date()
-                // let hours = ('0' + currentTime.getHours()).slice(-2);
-                // let minutes = ('0' + currentTime.getMinutes()).slice(-2);
-                // let seconds = ('0' + currentTime.getSeconds()).slice(-2);
-                
-                // this.now = `${hours} : ${minutes} : ${seconds}`;   
-                this.now = new Date();               
-            }, 1000);
-        }
+        Navbar,
+        Errors
     },
     computed: {
-        nowHours() {
-            return ('0' + this.now.getHours() % 60).slice(-2);
-        },
-        nowMinutes() {
-            return ('0' + this.now.getMinutes() % 60).slice(-2);
-        },nowSeconds() {
-            return ('0' + this.now.getSeconds() % 60).slice(-2);
-        },
-        presentTime(){
-            return `${this.nowHours} : ${this.nowMinutes} : ${this.nowSeconds}`;
-        }
-    },
-    created() {
-        //this.now = new Date();
-        this.setPresentTime();
+        ...mapGetters([
+            'error'
+        ])
     }
 }
 </script>
