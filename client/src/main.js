@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import VueScrollTo from 'vue-scrollto';
 import App from './App.vue';
 import axios from 'axios';
 import router from './router'; // since router folder contains a file called index.js, can just import folder instead of file
@@ -16,6 +17,9 @@ if (token) {
     Vue.prototype.$http.defaults.headers.common['Authorization'] = token;
 }
 
+
+
+Vue.use(VueScrollTo)
 
 new Vue({
   router,

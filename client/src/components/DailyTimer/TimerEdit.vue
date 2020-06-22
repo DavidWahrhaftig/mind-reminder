@@ -1,19 +1,19 @@
 <template>
-    <div class="mx-2 mx-lg-2" style="overflow: hidden;">
+    <div class="px-2 mx-lg-2" style="overflow: hidden;">
         <h3 class="py-0" style="display:flex;">
             <span class="mr-3" style="flex:2">Name: </span>
             <input style="overflow: visible;" placeholder="timer name..." class="timerNameInput" v-model="newName" type="text"/>
         </h3>
          
         <div class="form-group my-0 row justify-content-start">
-            <div class="col-12 col-xl-4  pr-xl-0" >
+            <div class="col-12 col-sm-6">
                 <label>From: </label>
                 <input type="time" 
                 class="form-control" 
                 placeholder="Select time"
                 v-model="newStartTime"/>
             </div>
-            <div class="col-12 col-xl-4 pr-xl-0">
+            <div class="col-12 col-sm-6">
                 <label>To:</label>
                 <input type="time" 
                 class="form-control" 

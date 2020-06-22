@@ -41,7 +41,7 @@ export default {
             showTimer: false,
             intervalID: '',
             timeoutID: '',
-            alarm: new Audio(require('../../../public/audios/harp-strumming.mp3'))
+            alarm: new Audio(require('../../../public/audios/harp-strumming-trimmed3.mp3'))
         }
     },
     computed: {
@@ -105,6 +105,11 @@ export default {
                 this.timeRemaining--;
                 if (this.timeRemaining == 0) {
                     this.alarm.play(); // play sound
+                    this.alarm.onended = () => {
+                        // Speak the name of the timer after alarm sound
+                        let msg = new SpeechSynthesisUtterance(this.timer.name);
+                        window.speechSynthesis.speak(msg);
+                    }
                     this.activateTimer(); // reactivate if necessary or set future call
                 }               
             }, 1000);
@@ -155,14 +160,20 @@ export default {
                 this.beginTimer();
             }, 1000 * waitInSeconds);
             
-        }
+        },
+        // scrollToElement() {
+        //     let options = "{behavior: 'smooth'}";
+        //     this.$el.scrollIntoView(options);
+        // }
     },
     created() {
         if (this.timer.enabled) {
             this.activateTimer();
         }
-        this.editMode = this.isNew()(this.timer._id);
+        // this.$scrollTo(this.$el, 2000, {container: this.$el.parentElement});
 
+        this.editMode = this.isNew()(this.timer._id);
+        // this.scrollToElement();
         console.log("Created Timer");
         console.log("New Timer: "+ this.isNew()(this.timer._id));
     },

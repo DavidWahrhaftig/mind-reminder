@@ -1,12 +1,12 @@
 <template>
-  <div>
-      <div class="row mt-1">
-          <div class="card mx-auto">
-              <div class="card-header text-white bg-primary">
-                  <h4>Register</h4>
-              </div>
-              <div class="card-body">
-                  <form>
+    <div>
+        <div class="row mt-1">
+            <div class="card mx-auto">
+                <div class="card-header text-white bg-primary">
+                    <h4>Register</h4>
+                </div>
+                <div class="card-body">
+                    <form>
                         <!-- username -->
                         <div class="form-group">
                             <label for="username">Username</label>
@@ -20,8 +20,8 @@
                         </div>
                         <!-- name -->
                         <!-- <div class="form-group">
-                          <label for="username">Name</label>
-                          <input 
+                            <label for="username">Name</label>
+                            <input 
                                 class="form-control"
                                 type="text" 
                                 id="name"
@@ -65,11 +65,11 @@
                         <button @click.prevent="registerUser" class="btn btn-primary">Register</button>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <router-link to="/login" class="card-link">Already have an account?</router-link>
-                  </form>
-              </div>
-          </div>
-      </div>
-  </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -114,5 +114,8 @@ export default {
 </script>
 
 <style>
-
+    .card {
+            width: 60%;
+            /* border-radius: 0; */
+    }
 </style>

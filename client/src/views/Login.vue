@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row mt-4">
+        <div class="row mt-1">
             <div class="card mx-auto">
                 <div class="card-header text-white bg-primary">
                     <h4>Login</h4>

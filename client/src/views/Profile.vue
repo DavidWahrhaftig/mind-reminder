@@ -6,7 +6,7 @@
         <h1 class="row display-5 text-info text-center">
             Current time {{ presentTime }} 
         </h1>
-        <hr>
+        <hr >
         <button class="btn btn-info btn-lg" @click="createTimer">Create Daily Timer <i class="fas fa-stopwatch"></i></button>
         <timer-grid v-if="timers" :timers="timers"/>
     </div>

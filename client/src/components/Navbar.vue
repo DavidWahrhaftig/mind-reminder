@@ -39,6 +39,10 @@
                         Logout
                         </a>
                     </li>
+                    <li class="nav-item navbar navbar-dark text-light" v-if="isLoggedIn">
+                        <span class="font-italic">{{user.username}}</span>
+                    </li>
+
                 </ul>
             </div>
         </div>
@@ -51,7 +55,8 @@ import { mapGetters, mapActions } from 'vuex';
 export default {
     computed: {
         ...mapGetters([
-            'isLoggedIn'
+            'isLoggedIn',
+            'user'
         ])
     },
     methods: {
