@@ -41,7 +41,7 @@ export default {
             showTimer: false,
             intervalID: '',
             timeoutID: '',
-            alarm: new Audio(require('../../../public/audios/harp-strumming3.mp3'))
+            alarm: new Audio(require('../../../public/audios/harp-strumming-trimmed3.mp3'))
         }
     },
     computed: {
