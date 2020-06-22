@@ -5,45 +5,48 @@ import { store } from '../store';
 
 Vue.use(VueRouter)
 
-  const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'about',
-    component: () => import( '../views/About.vue')
-  },
-  {
-      path: '/login',
-      name: 'login',
-      // lazy component loading
-      component: () => import( '../views/Login.vue'),
-      meta: {
-          // protect from logged in user
-          requiresGuest: true
-      }
-  },
-  {
-      path: '/register',
-      name: 'register',
-      component: () => import('../views/Register.vue'),
-      meta: {
-          // protect from logged in user
-          requiresGuest: true
-      }
-  },
-  {
-      path: '/profile',
-      name: 'profile',
-      component: () => import('../views/Profile.vue'),
-      meta: {
-          // protect from not logged in user
-          requiresAuth: true
-      }
-  }
+    const routes = [
+    {
+        path: '/',
+        name: 'home',
+        component: Home
+    },
+    {
+        path: '/about',
+        name: 'about',
+        component: () => import( '../views/About.vue')
+    },
+    {
+        path: '/login',
+        name: 'login',
+        // lazy component loading
+        component: () => import( '../views/Login.vue'),
+        meta: {
+            // protect from logged in user
+            requiresGuest: true
+        }
+    },
+    {
+        path: '/register',
+        name: 'register',
+        component: () => import('../views/Register.vue'),
+        meta: {
+            // protect from logged in user
+            requiresGuest: true
+        }
+    },
+    {
+        path: '/profile',
+        name: 'profile',
+        component: () => import('../views/Profile.vue'),
+        // afterEnter: async() => {
+        //     await store.actions.getProfile();
+        // },
+        meta: {
+            // protect from not logged in user
+            requiresAuth: true
+        }
+    }
 ]
 
 const router = new VueRouter({

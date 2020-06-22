@@ -28,7 +28,7 @@ export default {
     },
     methods: {
         ...mapActions([
-            'getUser',
+            'getProfile',
             'getTimers',
             'create'
 
@@ -71,6 +71,7 @@ export default {
         this.setPresentTime();
         // get user info
 
+        await this.getProfile();
         // get timers from database
         await this.getTimers();
         // if (res.success) {

@@ -104,12 +104,7 @@ export default {
             this.intervalID = setInterval(() => {
                 this.timeRemaining--;
                 if (this.timeRemaining == 0) {
-                    this.alarm.play(); // play sound
-                    this.alarm.onended = () => {
-                        // Speak the name of the timer after alarm sound
-                        let msg = new SpeechSynthesisUtterance(this.timer.name);
-                        window.speechSynthesis.speak(msg);
-                    }
+                    this.playAudio();
                     this.activateTimer(); // reactivate if necessary or set future call
                 }               
             }, 1000);
@@ -165,6 +160,15 @@ export default {
         //     let options = "{behavior: 'smooth'}";
         //     this.$el.scrollIntoView(options);
         // }
+        playAudio() {
+            this.alarm.muted = false;
+            this.alarm.play(); // play sound
+            this.alarm.onended = () => {
+                // Speak the name of the timer after alarm sound
+                let msg = new SpeechSynthesisUtterance(this.timer.name);
+                window.speechSynthesis.speak(msg);
+            }
+        }
     },
     created() {
         if (this.timer.enabled) {

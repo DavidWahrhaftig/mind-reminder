@@ -5,7 +5,7 @@ import router from '../../router';
 const state = {
     // if the user is logged in then the token will be available
     token: localStorage.getItem('token') || '', // sets token from browser's locaclStorage
-    user: {},
+    user: {},//localStorage.getItem('user') || {},
     status: '',
     error:  null
 };
@@ -32,7 +32,7 @@ const mutations = {
     },
     auth_success(state, {token, user}) {   
         state.token = token;
-        state.user = user;
+        state.user = user;//localStorage.setItem('user', user);
         // console.log(user);
         state.status = 'success';
         state.error = null;
@@ -76,12 +76,12 @@ const actions = {
             if (res.data.success) {
                 const token = res.data.token;
                 const userRecieved = res.data.user;
-                console.log(res);
-                console.log(userRecieved);
+                // console.log(res);
+                // console.log(userRecieved);
                 // Store the token into the localStorage
                 localStorage.setItem('token', token);
                 // Set the axios defaults
-                console.log("before axios.defaults.headers....");
+                // console.log("before axios.defaults.headers....");
                 axios.defaults.headers.common['Authorization'] = token;
                 commit('auth_success', {token, user: userRecieved}); // call the mutation auth_success with the given arguments
             }
@@ -115,6 +115,7 @@ const actions = {
     // Logout user
     async logout({ commit }) {
         await localStorage.removeItem('token');
+        // await localStorage.removeItem('user');
         commit('logout');
         // delete axios token
         delete axios.defaults.headers.common['Authorization'];
