@@ -46,6 +46,18 @@ Vue.use(VueRouter)
             // protect from not logged in user
             requiresAuth: true
         }
+    },
+    {
+        path: '/reviews',
+        name: 'reviews',
+        component: () => import('../views/Reviews.vue'),
+        // afterEnter: async() => {
+        //     await store.actions.getProfile();
+        // },
+        meta: {
+            // protect from not logged in user
+            requiresAuth: true
+        }
     }
 ]
 

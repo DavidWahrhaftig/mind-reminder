@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 //const passport = require('passport');
 //const mongoose = require('mongoose');
 
+const verifyToken = require('../verification');
+
 const key = require('../../config/keys').secret;
 const Timer = require('../../model/Timer');
 const User = require('../../model/User');
@@ -183,22 +185,22 @@ router.delete('/', verifyToken,(req, res) => {
 
             
 
-// FORMAT OF TOKEN 
-// Authorization: Bearer <access_token>
-function verifyToken(req, res, next) {
-    const bearerHeader = req.headers['authorization']; // needs to be 'authorization' and not 'Authorization'
+// // FORMAT OF TOKEN 
+// // Authorization: Bearer <access_token>
+// function verifyToken(req, res, next) {
+//     const bearerHeader = req.headers['authorization']; // needs to be 'authorization' and not 'Authorization'
 
-    if(typeof bearerHeader !== 'undefined') {
-        const bearer = bearerHeader.split(' ');
-        // Get token 
-        const bearerToken = bearer[1];
-        req.token = bearerToken;
-        next();
-    } else {
-        // Forbidden
-        console.log("forbidden 1");
-        res.sendStatus(403);
-    }
-}
+//     if(typeof bearerHeader !== 'undefined') {
+//         const bearer = bearerHeader.split(' ');
+//         // Get token 
+//         const bearerToken = bearer[1];
+//         req.token = bearerToken;
+//         next();
+//     } else {
+//         // Forbidden
+//         console.log("forbidden 1");
+//         res.sendStatus(403);
+//     }
+// }
 
 module.exports = router;

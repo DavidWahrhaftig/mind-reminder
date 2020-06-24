@@ -50,6 +50,10 @@ app.use('/api/users', users);
 const timers = require('./routes/api/timers');
 app.use('/api/timers', timers);
 
+// Bring in the Timers route
+const reviews = require('./routes/api/reviews');
+app.use('/api/reviews', reviews);
+
 app.get('*', (req, res) => {
     console.log(path.join(__dirname, 'public/index.html'));
     res.sendFile(path.join(__dirname, 'public/index.html'));

@@ -35,6 +35,11 @@
                         </router-link>
                     </li>
                     <li class="nav-item" v-if="isLoggedIn">
+                        <router-link to="/reviews" class="nav-link">
+                        Reviews
+                        </router-link>
+                    </li>
+                    <li class="nav-item" v-if="isLoggedIn">
                         <a style="cursor:pointer;" to="/logout" class="nav-link" @click.prevent="logoutUser">
                         Logout
                         </a>
