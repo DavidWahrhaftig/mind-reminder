@@ -45,7 +45,10 @@
                         {{ review.content }}
                     </p>
                     <cite>
-                        {{ review.user.username}}
+                      {{ review.date | displayDate }}
+                    </cite>
+                    <cite>
+                      {{ review.user.username }}
                     </cite>
                     <button
                         class="btn btn-sm btn-warning mt-2"
@@ -87,6 +90,13 @@ export default {
             'reviews',
             'user'
         ])
+    },
+    filters: {
+        displayDate(dateString) {
+            let date = new Date(dateString);
+            let weekdayAndMonth = date.toString().substring(0,7);
+            return  weekdayAndMonth + ' ' + `${date.getDate()}` + ' ' + `${date.getFullYear()}`;
+        }
     },
     async created() {
         await this.getProfile();

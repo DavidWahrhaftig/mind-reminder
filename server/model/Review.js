@@ -14,6 +14,10 @@ const ReviewSchema = new mongoose.Schema({
     content: {
         type: String,
         default: 'Content is empty'
+    },
+    date: {
+        type: Date,
+        required: true
     }
 });
 

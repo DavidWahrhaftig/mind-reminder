@@ -50,10 +50,11 @@ router.post('/', verifyToken,(req, res) => {
         // create new review
         let {  
             title, 
-            content
+            content,
+            date
         } = req.body
 
-        Review.create({title, content, user: authData._id}).then(newReview => {
+        Review.create({title, content, date, user: authData._id}).then(newReview => {
             res.status(201).json({
                 success: true,
                 timer: newReview,

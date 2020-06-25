@@ -67,7 +67,7 @@ const actions = {
     async createReview({commit}, review) {
         commit("new_review_request");
         try {
-            let res = await axios.post('/api/reviews', review);
+            let res = await axios.post('/api/reviews', {...review, date: new Date()} );
             if (res.data.success) {
                 commit('new_review_success', res.data.review);
             }
