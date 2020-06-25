@@ -31,8 +31,8 @@
                                     rows="5"
                                     v-model="content"></textarea>
                         </div>
-                        <button @click="createReview({title, content})" class="btn btn-primary">Post</button>
-                        <button @click="writingReview=false" class="btn btn-primary mx-2">Cancel</button>
+                        <button @click.prevent="postNewReview()" class="btn btn-primary">Post</button>
+                        <button @click.prevent="writingReview=false" class="btn btn-primary mx-2">Cancel</button>
                         
                     </form>
                 </div>
@@ -82,6 +82,14 @@ export default {
         async remove(id) {
             await this.removeReview(id);
             await this.getReviews();
+        },
+        async postNewReview(){
+            let res = await this.createReview({title: this.title, content: this.content})
+            if (res.data.success == true) {
+                this.writingReview=false
+                await this.getReviews();
+            }
+
         }
     },
     computed:{ 
