@@ -34,7 +34,7 @@
                 <!-- Edit Button and On Switch -->
                 <div class="col-3 pr-0">
                     <button class=" row btn btn-sm btn-warning text-light m-0 mb-2 btn-block" 
-                            @click="$emit('edit')">
+                            @click="$emit('enterEditMode')">
                         <i class="fas fa-edit"></i>
                     </button>
                     <div class="onoffswitch">

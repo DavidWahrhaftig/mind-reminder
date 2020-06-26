@@ -8,7 +8,7 @@
                 :timer="timer"
                 :updateTimer="updateTimer"
                 :removeTimer="removeTimer"
-                @exitEditMode="editMode=false"
+                @exitEditMode="resume"
                 v-if="editMode"/>
             <timer-display
                 :timer="timer"
@@ -17,7 +17,7 @@
                 :updateTimer="updateTimer"
                 @enable="activateTimer"
                 @disable="stopTimer"
-                @edit="edit" 
+                @enterEditMode="edit" 
                 v-else/>     
             </transition>
         </div>       
@@ -120,6 +120,13 @@ export default {
         edit() {
             this.editMode = true;
             this.stopTimer();
+        },
+        resume() {
+            this.editMode = false;
+            if(this.timer.enabled) {
+            
+                this.activateTimer();
+            }
         },
         activateTimer() {
             // either begin timer or set a future call
