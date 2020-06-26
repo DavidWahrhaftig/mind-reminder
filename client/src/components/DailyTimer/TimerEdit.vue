@@ -5,8 +5,45 @@
             <input style="overflow: visible;" placeholder="timer name..." class="timerNameInput" v-model="newName" type="text"/>
         </h3>
          
-        <div class="form-group my-0 row justify-content-start">
-            <div class="col-12 col-sm-6">
+        <div class="form-group my-0">
+            <!-- Timer Type -->
+            <!-- <div class="row justify-content-between mb-2">
+                <div class="col-sm-4 col-lg-6">
+                    <label>Repeat? </label>
+                </div>
+                <div class="col-sm-8 col-lg-6">
+                    <input type="radio" id="yes" value="Yes" v-model="newType">
+                    <label for="yes">Yes</label>
+                    <input type="radio" id="no" value="No" v-model="newType">
+                    <label for="no">No</label>
+                </div>
+                
+            </div> -->
+            <!-- From & Input -->
+            <div class="row justify-content-between mb-2">
+                <div class="col-sm-4 col-lg-6">
+                    <label>From: </label>
+                </div>
+                <div class="col-sm-8 col-lg-6">
+                    <input type="time" 
+                        class="form-control"
+                        placeholder="Select time"
+                        v-model="newStartTime"/>
+                </div>
+            </div>
+            <!-- To & Input -->
+            <div class="row justify-content-between mb-2">
+                <div class="col-sm-4 col-lg-6">
+                    <label>To: </label>
+                </div>
+                <div class="col-sm-8 col-lg-6">
+                    <input type="time" 
+                        class="form-control" 
+                        placeholder="Select time"
+                        v-model="newEndTime"/>
+                </div>
+            </div>
+            <!-- <div class="col-12 col-sm-6">
                 <label>From: </label>
                 <input type="time" 
                 class="form-control" 
@@ -19,8 +56,8 @@
                 class="form-control" 
                 placeholder="Select time"
                 v-model="newEndTime"/>
-            </div>
-            <div class="col-6 col-xl-4">
+            </div> -->
+            <!-- <div class="col-6 col-xl-4">
                 <label>Every:</label>
                 <div>
                     <input class="form-control" type="number" min="0" max="59" 
@@ -29,7 +66,19 @@
                 <div>
                     min
                 </div>
-            </div>           
+            </div> -->
+             <div class="row justify-content-between mb-2">
+                <div class="col-6 col-sm-8">
+                    <label>Every (min):</label>
+                </div>
+                <div class="col-6 col-sm-4">
+                    <input type="number" 
+                        class="form-control"
+                        min="1"
+                        max="59"
+                        v-model="newPeriod"/>
+                </div>
+            </div>
         </div>
             <!-- <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6-offset-3 form-group">
                 <label for="enabled">
@@ -48,12 +97,19 @@
                 </label>
             </div> -->
         <div class="float-right mt-0 mt-lg-2">
+            <!-- Save Button -->
             <button class="btn btn-success mr-1" @click="updateTimer(editedTimer)">
                 <i class="fas fa-save"></i>
             </button>
-            <button class="btn btn-danger" @click="removeTimer">
+            <!-- Delete Button -->
+            <button class="btn btn-danger mr-1" @click="removeTimer">
                 <i class="fas fa-trash-alt"></i>
             </button>
+            <!-- Back Button -->
+            <button class="btn btn-info" @click="$emit('exitEditMode')">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            
         </div>        
         
     </div>
@@ -70,7 +126,8 @@ export default {
             newStartTime: '',
             newEndTime: '',
             newPeriod: 1,
-            newName: ''
+            newName: '',
+            newType: 'Yes'
         }
     },
     computed: {
@@ -80,7 +137,8 @@ export default {
                 end: this.newEndTime,
                 period: Number(this.newPeriod),
                 name: this.newName,
-                enabled: this.timer.enabled
+                enabled: this.timer.enabled //,
+                // type: this.newType
             }
         }
     },
@@ -129,6 +187,7 @@ export default {
 
     input[type="time"], input[type="number"] {
         font-size:0.9rem;
+        border: none;
     } 
 </style>
 

@@ -8,6 +8,7 @@
                 :timer="timer"
                 :updateTimer="updateTimer"
                 :removeTimer="removeTimer"
+                @exitEditMode="editMode=false"
                 v-if="editMode"/>
             <timer-display
                 :timer="timer"
