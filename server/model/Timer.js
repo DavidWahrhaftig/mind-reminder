@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Create the User Schema
+// Create the Timer Schema
 const TimerSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -21,7 +21,7 @@ const TimerSchema = new mongoose.Schema({
     enabled: {
         type: Boolean,
         default: true
-    },
+    }
     // user: {
     //     type: mongoose.Schema.Types.ObjectId,
 	// 	ref: "User" 

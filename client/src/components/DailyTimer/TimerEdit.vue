@@ -1,7 +1,7 @@
 <template>
     <div class="px-2 mx-lg-2" style="overflow: hidden;">
         <h3 class="py-0" style="display:flex;">
-            <span class="mr-3" style="flex:2">Name: </span>
+            <span class="mr-3" style="flex:2">Label: </span>
             <input style="overflow: visible;" placeholder="timer name..." class="timerNameInput" v-model="newName" type="text"/>
         </h3>
          
@@ -22,7 +22,7 @@
             <!-- From & Input -->
             <div class="row justify-content-between mb-2">
                 <div class="col-sm-4 col-lg-6">
-                    <label>From: </label>
+                    <label>At: </label>
                 </div>
                 <div class="col-sm-8 col-lg-6">
                     <input type="time" 
@@ -96,21 +96,22 @@
                         v-model="activityStatus"> Disabled
                 </label>
             </div> -->
-        <div class="float-right mt-0 mt-lg-2">
-            <!-- Save Button -->
-            <button class="btn btn-success mr-1" @click="updateTimer(editedTimer)">
-                <i class="fas fa-save"></i>
-            </button>
-            <!-- Delete Button -->
-            <button class="btn btn-danger mr-1" @click="removeTimer">
-                <i class="fas fa-trash-alt"></i>
-            </button>
-            <!-- Back Button -->
-            <button class="btn btn-info" @click="$emit('exitEditMode')">
-                <i class="fas fa-arrow-right"></i>
-            </button>
-            
-        </div>        
+        <div class="mt-0 mt-lg-2">
+        <!-- Back Button -->
+        <button class="btn btn-info" @click="$emit('exitEditMode')">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+            <div class="float-right">
+                <!-- Save Button -->
+                <button class="btn btn-success mr-1" @click="updateTimer(editedTimer)">
+                    <i class="fas fa-save"></i>
+                </button>
+                <!-- Delete Button -->
+                <button class="btn btn-danger" @click="removeTimer">
+                    <i class="fas fa-trash-alt"></i>
+                </button>            
+            </div>
+        </div>    
         
     </div>
 </template>

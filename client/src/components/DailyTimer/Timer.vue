@@ -229,9 +229,9 @@ function getRemainingSeconds(date, interval){
         // console.log("x: " + x);
         let remainingMinutes = (endPoint.hour * 60 + endPoint.minutes) - (date.getHours() * 60 + date.getMinutes()); 
         //let remaining = endPoint.minutes + (x * 60) - date.getMinutes();
-        console.log("remaining minutes:");
-        console.log(remainingMinutes);
-        console.log("=============================================")
+        // console.log("remaining minutes:");
+        // console.log(remainingMinutes);
+        // console.log("=============================================")
         return remainingMinutes * 60 - date.getSeconds();
     }
 }
@@ -241,6 +241,7 @@ function getCurrentInterval(date, startBound, endBound, period) {
     let startPoint = {};
     let endPoint = {};
     
+    // make minutes conversion
     let nowMinutes = date.getHours() * 60 + date.getMinutes();
     let sbMinutes = startBound.hour * 60 + startBound.minutes;
     let ebMinutes = endBound.hour * 60 + endBound.minutes;
@@ -259,8 +260,8 @@ function getCurrentInterval(date, startBound, endBound, period) {
     endPoint.hour = Math.floor((x) / 60); //230
     endPoint.minutes = (x) % 60;
 
-    console.log("interval: ");
-    console.log({startPoint, endPoint});
+    // console.log("interval: ");
+    // console.log({startPoint, endPoint});
     return {startPoint, endPoint}; 
 }
 
