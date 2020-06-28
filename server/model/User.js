@@ -22,10 +22,10 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    timers: [				
+    reminders: [				
 		{
 			type: mongoose.Schema.Types.ObjectId,
-			ref: "Timer"
+			ref: "Reminder"
 		}
 	],
 });

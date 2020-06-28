@@ -5,7 +5,7 @@
         <div class="jumbotron jumbotron-fluid">
             <div class="container  text-center">
                 <h1 class="display-4">Welcome to Mind Reminder <i class="fas fa-hourglass-start"></i></h1>
-                <p class="lead">Organize your timers and get reminded!</p>
+                <p class="lead">Organize your reminders and get productivity back!</p>
                 <div class="div" v-if="!isLoggedIn">
                     <router-link tag="button" to="/login" class="btn btn-primary navbar-bg mx-3">
                         Login

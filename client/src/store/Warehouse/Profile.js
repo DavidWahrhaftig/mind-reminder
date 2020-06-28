@@ -1,174 +1,168 @@
 import axios from 'axios';
+// import reminderTypes from '../../../../server/optionTypes';
 // import { remove } from '../../../../server/model/User';
 // import Vue from 'vue';
 
 const state = {
     status: '',
     error: '',
-    timers: [],
+    reminders: [],
+    reminderTypes: {},
     newIDs: []
 };
 
 const getters = {
-    timers: state => {
-        return state.timers;
+    reminders: state => {
+        return state.reminders;
     },
-    // getDailyTimerByIndex: (state) => (index) => {
-    //     return state.dailyTimers[index];
+    // getDailyreminderByIndex: (state) => (index) => {
+    //     return state.dailyreminders[index];
     // }
     isNew: state => {
-        // timer is new if its id is not in the timers id
+        // reminder is new if its id is not in the reminders id
         return id => {
             const index = state.newIDs.indexOf(id);
             return (index >= 0); // index not negative hence its in the newID array
         }
+    },
+    reminderTypes: state => {
+        return state.reminderTypes;
     }
 };
 
 const mutations = {
-    // updateTimer(state, payload) {
-    //     Vue.set(state.dailyTimers[payload.index], 'startTime', payload.timer.startTime);
-    //     Vue.set(state.dailyTimers[payload.index], 'endTime', payload.timer.endTime);
-    //     Vue.set(state.dailyTimers[payload.index], 'period', payload.timer.period);
-    //     Vue.set(state.dailyTimers[payload.index], 'name', payload.timer.name);
-    //     //Vue.set(state.dailyTimers[payload.index], 'enabled', payload.timer.enabled);
-        
-    // },
-    // removeTimer(state, index) {
-    //     console.log('Removing index: ' + index);
-    //     console.log(state.dailyTimers[index]);
-    //     state.dailyTimers.splice(index, 1);
-    // }
-    get_timers_request(state){
+    get_reminders_request(state){
         state.status = 'loading';
         state.error = null;
     },
-    get_timers_success(state, timers){
+    get_reminders_success(state, {reminders, types}){
         state.status = 'success';
-        state.timers = timers;
-        // state.timers = timers.map(timer => {
-        //     const index = state.newIDs.indexOf(timer._id);
+        state.reminders = reminders;
+        state.reminderTypes = types;
+        // state.reminders = reminders.map(reminder => {
+        //     const index = state.newIDs.indexOf(reminder._id);
         //     console.log("index of newID: "+ index);
         //     const isNew = (index < 0);
         //     if (isNew) state.newIDs.splice(index, 1);
-        //     return {...timer, isNew: false}
+        //     return {...reminder, isNew: false}
         // });
         state.error = null;
     },
-    get_timers_error(state, err){
+    get_reminders_error(state, err){
         state.error = err.response.data.msg;
     }, 
-    new_timer_request(state){
+    new_reminder_request(state){
         state.status = 'loading';
         state.error = null;
     },
-    new_timer_success(state, timer){
+    new_reminder_success(state, reminder){
         state.status = 'success';
-        state.newIDs.push(timer._id);
+        state.newIDs.push(reminder._id);
         state.error = null;
     },
-    new_timer_error(state, err){
+    new_reminder_error(state, err){
         state.error = err.response.msg;
     },
-    update_timer_request(state) {
+    update_reminder_request(state) {
         state.status = 'loading';
         state.error = null;
 
     },
-    update_timer_success(state, timer) {
+    update_reminder_success(state, reminder) {
         state.status = 'success';
-        const index = state.newIDs.indexOf(timer._id);
+        const index = state.newIDs.indexOf(reminder._id);
         if (index >= 0) state.newIDs.splice(index, 1);
         state.error = null;
     },
-    update_timer_error(state, err) {
+    update_reminder_error(state, err) {
         state.status = 'failed';
         state.status = err.response.msg;
     },
-    remove_timer_request(state) {
+    remove_reminder_request(state) {
         state.status = 'loading';
         state.error = null;
     },
-    remove_timer_success(state, id) {
+    remove_reminder_success(state, id) {
         state.status = 'success';
         const index = state.newIDs.indexOf(id);
         if (index >= 0) state.newIDs.splice(index, 1);
         state.error = null;
     },
-    remove_timer_error(state, err) {
+    remove_reminder_error(state, err) {
         state.status = 'failed';
         state.status = err.response.msg;
     }
 };
 
 const actions = {
-    async getTimers({commit}) {
-        commit("get_timers_request");
+    async getReminders({commit}) {
+        commit("get_reminders_request");
         try {
-            let res = await axios.get('/api/timers');
+            let res = await axios.get('/api/reminders');
             if (res.data.success) {
-                const timers = res.data.timers;
-                commit('get_timers_success', timers);
+                const reminders = res.data.reminders;
+                const types = res.data.reminderTypes;
+                commit('get_reminders_success', {reminders, types});
             }
             return res;
         } catch(err) {
-            commit('get_timers_error', err);
+            commit('get_reminders_error', err);
         }
     },
     async create({commit}, currentTime) {
-        commit("new_timer_request");
+        commit("new_reminder_request");
         try {
             // const date = new Date();
             // const hour = ('0' + date.getHours() % 24).slice(-2);
             // const minutes = ('0' + date.getMinutes() % 60).slice(-2);
-            const newTimer = {
+            const newReminder = {
                 start: currentTime,
                 end: currentTime
             }
-            let res = await axios.post('/api/timers', newTimer);
+            let res = await axios.post('/api/reminders', newReminder);
             if (res.data.success) {
-                // const timers = res.data.timer;
-                console.log("new timer to new_timer_success");
-                console.log(res.data.timer);
-                commit('new_timer_success', res.data.timer);
+                // const reminders = res.data.reminder;
+                console.log("new reminder to new_reminder_success");
+                console.log(res.data.reminder);
+                commit('new_reminder_success', res.data.reminder);
             }
             return res;
 
         } catch(err) {
-            console.log("commit new_timer_error");
+            console.log("commit new_reminder_error");
             console.log(err);
             
-            commit('new_timer_error', err);
+            commit('new_reminder_error', err);
             
         }
     },
     async update({commit}, payload) {
-        commit('update_timer_request');
-        let res = await axios.put('/api/timers', payload);
+        commit('update_reminder_request');
+        let res = await axios.put('/api/reminders', payload);
         try { 
             if (res.data.success) {
-                console.log(res.data.timer);
-                commit('update_timer_success', res.data.timer);
+                console.log(res.data.reminder);
+                commit('update_reminder_success', res.data.reminder);
             }
             return res;
 
         } catch(err) {            
-            commit('update_timer_error', err);
+            commit('update_reminder_error', err);
         }
     },
     async remove({commit}, id) {
-        commit('remove_timer_request');
+        commit('remove_reminder_request');
         console.log(id);
-        let res = await axios.delete('/api/timers', { data: { id } });
+        let res = await axios.delete('/api/reminders', { data: { id } });
         try { 
             if (res.data.success) {
-                // console.log(res.data.timer);
-                commit('remove_timer_success', id);
+                // console.log(res.data.reminder);
+                commit('remove_reminder_success', id);
             }
             return res;
 
         } catch(err) {            
-            commit('remove_timer_error', err);
+            commit('remove_reminder_error', err);
         }
     }
 };

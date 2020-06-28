@@ -7,19 +7,19 @@
             Current time {{ presentTime }} 
         </h1>
         <hr >
-        <button class="btn btn-info btn-lg" @click="createTimer">Create Daily Timer <i class="fas fa-stopwatch"></i></button>
-        <timer-grid v-if="timers" :timers="timers"/>
+        <button class="btn btn-info btn-lg" @click="createReminder">Create Reminder <i class="fas fa-stopwatch"></i></button>
+        <reminders-grid v-if="reminders" :reminders="reminders"/>
     </div>
 </template>
 
 <script>
-import TimerGrid from '../components/TimerGrid.vue';
+import RemindersGrid from '../components/RemindersGrid.vue';
 import { mapActions, mapGetters } from 'vuex'; 
 
 export default {
     name: 'App',
     components: {
-        TimerGrid
+        RemindersGrid
     },
     data() {
         return {
@@ -29,7 +29,7 @@ export default {
     methods: {
         ...mapActions([
             'getProfile',
-            'getTimers',
+            'getReminders',
             'create'
 
         ]),
@@ -39,20 +39,20 @@ export default {
                 this.now = new Date();               
             }, 1000);
         },
-        async createTimer() {
+        async createReminder() {
             // make api call to create timer
             const time = `${this.nowHours}:${this.nowMinutes}`;
             await this.create(time);
             // if (res.data.success) {
-                // reload the timers
-            await this.getTimers();
+                // reload the reminders
+            await this.getReminders();
             // }            
         }
     },
     computed: {
         ...mapGetters([
             'user',
-            'timers'
+            'reminders'
         ]),
         nowHours() {
             return ('0' + this.now.getHours() % 60).slice(-2);
@@ -72,8 +72,8 @@ export default {
         // get user info
 
         await this.getProfile();
-        // get timers from database
-        await this.getTimers();
+        // get reminders from database
+        await this.getReminders();
         // if (res.success) {
 
         // }

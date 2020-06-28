@@ -8,11 +8,12 @@ const jwt = require('jsonwebtoken');
 const verifyToken = require('../verification');
 
 const key = require('../../config/keys').secret;
-const Timer = require('../../model/Timer');
+const Reminder = require('../../model/Reminder');
 const User = require('../../model/User');
+const reminderTypes = require('../../optionTypes');
 
 /**
- * @route GET api/timers/
+ * @route GET api/reminders/
  * @desc Return the User's Data
  * @access Private
  */
@@ -21,13 +22,13 @@ const User = require('../../model/User');
 //         session: false
 //     }), (req, res) => {
 //         return res.json({
-//             timers: req.user.timers      
+//             reminders: req.user.reminders      
 //         });
 // });
 
 /**
- * @route GET api/timers/
- * @desc Return the User's Timers
+ * @route GET api/reminders/
+ * @desc Return the User's Reminders
  * @access Private?
  */
 router.get('/', verifyToken,(req, res) => {
@@ -37,13 +38,14 @@ router.get('/', verifyToken,(req, res) => {
             console.log("forbidden 2");
         } else {
             // find user 
-            User.findById(authData._id).populate('timers').then(user => {
-                const timers = user.timers;
+            User.findById(authData._id).populate('reminders').then(user => {
+                const reminders = user.reminders;
                 // console.log("In Timers Get Request");
                 res.status(200).json({
                     success: true,
-                    timers,
-                    msg: 'Get timers Request allowed',
+                    reminders,
+                    reminderTypes,
+                    msg: 'Get reminders Request allowed',
                     authData
                 });
             }).catch(err => {
@@ -58,8 +60,8 @@ router.get('/', verifyToken,(req, res) => {
 
 
 /**
- * @route Post api/timers/
- * @desc Create New Timer
+ * @route Post api/reminders/
+ * @desc Create New Reminder
  * @access Private?
  */
 router.post('/', verifyToken,(req, res) => {
@@ -69,28 +71,32 @@ router.post('/', verifyToken,(req, res) => {
             console.log("forbidden 2");
         } else {
             // find user 
-            User.findById(authData._id).populate('timers').then(user => {
+            User.findById(authData._id).populate('reminders').then(user => {
                 // create new Timer
                 // const newTimer = req.body.timer;
-                const timer = {
+                const reminder = {
                     start: req.body.start,
                     end: req.body.end,
-                    period: req.body.period,
-                    name: req.body.name,
+                    // period: req.body.period,
+                    // name: req.body.name,
+                    // settings: {
+                    //     type: reminderTypes.ONCE
+                    //     // regularity: req.body.regularity
+                    // }
                 }
-                console.log("Creating New Timer");
-                console.log(timer);
-                Timer.create(timer).then(newTimer => {
+                console.log("Creating New Reminder");
+                console.log(reminder);
+                Reminder.create(reminder).then(newReminder => {
                     // add timer to user and save
                     console.log("after Creating timer before sending status");
-                    console.log(newTimer);
-                    user.timers.push(newTimer);
+                    console.log(newReminder);
+                    user.reminders.push(newReminder);
                     user.save();
                     // send response
                     res.status(201).json({
                         success: true,
-                        timer: newTimer,
-                        msg: 'Created New Timer!',
+                        reminder: newReminder,
+                        msg: 'Created New Reminder!',
                     });
                 }).catch(err => {
                     res.status(400).json({
@@ -109,8 +115,8 @@ router.post('/', verifyToken,(req, res) => {
 }); 
 
 /**
- * @route Put api/timers/
- * @desc Update timer
+ * @route Put api/reminders/
+ * @desc Update reminder
  * @access Private
  */
 router.put('/', verifyToken,(req, res) => {
@@ -121,18 +127,18 @@ router.put('/', verifyToken,(req, res) => {
         } else {
             // maybe need to find user to ensure the right user is updating their timers
             // find timer
-            console.log('updating timer');
-            console.log(req.body);
-            Timer.findByIdAndUpdate(req.body.id, req.body.timer, {new: true}).then(updatedTimer => {
+            console.log('updating reminder');
+            // console.log(req.body);
+            Reminder.findByIdAndUpdate(req.body.id, req.body.reminder, {new: true}).then(updatedReminder => {
                 res.status(200).json({
                     success: true,
-                    timer: updatedTimer,
-                    msg: 'Updated Timer!',
+                    reminder: updatedReminder,
+                    msg: 'Updated Reminder!',
                 });
             }).catch(err => {
                 res.status(404).json({
                     success: false,
-                    msg: "Failed to update timer."
+                    msg: "Failed to update reminder."
                 });
             })
         }
@@ -140,7 +146,7 @@ router.put('/', verifyToken,(req, res) => {
 });
 
 /**
- * @route Delete api/timers/
+ * @route Delete api/reminders/
  * @desc Delete timer
  * @access Private
  */
@@ -156,27 +162,27 @@ router.delete('/', verifyToken,(req, res) => {
             // Remove timer from user's timers array
             console.log("Deleting, showing req.body")
             console.log(req.body);
-            Timer.findByIdAndRemove(req.body.id).then(removedTimer => {
+            Reminder.findByIdAndRemove(req.body.id).then(removedReminder => {
                 // find User
                 // User.update({} , {$pull: {timers: removedTimer._id}});
                 User.findById(authData._id).then(user => {
                     //const objectId = mongoose.Types.objectId(removedTimer._id);
-                    user.timers.pull({ _id: req.body.id});
+                    user.reminders.pull({ _id: req.body.id});
                     user.save();
                     res.status(200).json({
                         success: true,
-                        msg: 'Timer Deleted!',
+                        msg: 'Reminder Deleted!',
                     });
                 }).catch(err => {
                     res.status(404).json({
                         success: false,
-                        msg: "Failed to delete timer from user's timers array."
+                        msg: "Failed to delete reminder from user's reminders array."
                     });
                 }); 
             }).catch(err => {
                 res.status(404).json({
                     success: false,
-                    msg: "Failed to delete timer."
+                    msg: "Failed to delete reminder."
                 });
             })
         }

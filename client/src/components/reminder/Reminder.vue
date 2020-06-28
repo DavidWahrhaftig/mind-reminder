@@ -1,21 +1,21 @@
 <template>
     <div class="col-4">  
-        <div class="mx-1 my-2 rounded py-2" :class="[{'timer-on': timer.enabled}, {'timer-off': !timer.enabled}, {'timer-edit': editMode}]">      
+        <div class="mx-1 my-2 rounded py-2" :class="[{'timer-on': reminder.enabled}, {'timer-off': !reminder.enabled}, {'timer-edit': editMode}]">      
             <transition enter-active-class="animate__animated animate__fadeIn"
                         leave-active-class="animate__animated animate__fadeOut"
                         mode="out-in">
-            <timer-edit
-                :timer="timer"
-                :updateTimer="updateTimer"
-                :removeTimer="removeTimer"
+            <reminder-edit
+                :reminder="reminder"
+                :updateReminder="updateReminder"
+                :removeReminder="removeReminder"
                 @exitEditMode="resume"
                 v-if="editMode"/>
-            <timer-display
-                :timer="timer"
+            <reminder-display
+                :reminder="reminder"
                 :showTimer="showTimer"
                 :timeRemainingInSeconds="timeRemaining"
-                :updateTimer="updateTimer"
-                @enable="activateTimer"
+                :updateReminder="updateReminder"
+                @enable="enableReminder"
                 @disable="stopTimer"
                 @enterEditMode="edit" 
                 v-else/>     
@@ -25,15 +25,15 @@
 </template>
 
 <script>
-import TimerDisplay from './TimerDisplay.vue';
-import TimerEdit from './TimerEdit.vue';
+import ReminderDisplay from './ReminderDisplay.vue';
+import ReminderEdit from './ReminderEdit.vue';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
-    props: ['timer'],
+    props: ['reminder'],
     components: {
-        TimerDisplay,
-        TimerEdit
+        ReminderDisplay,
+        ReminderEdit
     },
     data() {
         return {
@@ -48,14 +48,14 @@ export default {
     computed: {
         startBound() {
             return {
-                hour: Number(this.timer.start.substring(0,2)), 
-                minutes: Number(this.timer.start.substring(3,5))
+                hour: Number(this.reminder.start.substring(0,2)), 
+                minutes: Number(this.reminder.start.substring(3,5))
             }
         },
         endBound() {
             return {
-                hour: Number(this.timer.end.substring(0,2)), 
-                minutes: Number(this.timer.end.substring(3,5))
+                hour: Number(this.reminder.end.substring(0,2)), 
+                minutes: Number(this.reminder.end.substring(3,5))
             }
         }     
     },
@@ -64,32 +64,32 @@ export default {
             'isNew'
         ]),
         ...mapActions([
-            'getTimers',
+            'getReminders',
             'update',
             'remove'
         ]),
-        async updateTimer(editedTimer) {
+        async updateReminder(modifiedTimer) {
 
             //  update document in database 
-            let res = await this.update({id: this.timer._id, timer: editedTimer});
+            let res = await this.update({id: this.reminder._id, reminder: modifiedTimer});
 
             if (res.data.success) {
                 this.editMode = false;
                 
-                // get timers
-                await this.getTimers();
+                // get reminders
+                await this.getReminders();
                 
                 // 
-                if (this.timer.enabled) {
-                    this.activateTimer();
+                if (this.reminder.enabled) {
+                    this.enableReminder();
                 } else {
                     this.stopTimer();
                 }
             }
         },
-        async removeTimer() {
-            await this.remove(this.timer._id);
-            await this.getTimers();
+        async removeReminder() {
+            await this.remove(this.reminder._id);
+            await this.getReminders();
         },
         beginTimer() {
             let date = new Date();
@@ -99,14 +99,14 @@ export default {
             // }
             this.showTimer = true;
 
-            let interval = getCurrentInterval(date, this.startBound, this.endBound, Number(this.timer.period));
+            let interval = getCurrentInterval(date, this.startBound, this.endBound, Number(this.reminder.period));
             this.timeRemaining = getRemainingSeconds(date, interval);
             console.log(this.timeRemaining);
             this.intervalID = setInterval(() => {
                 this.timeRemaining--;
                 if (this.timeRemaining == 0) {
                     this.playAudio();
-                    this.activateTimer(); // reactivate if necessary or set future call
+                    this.enableReminder(); // reactivate if necessary or set future call
                 }               
             }, 1000);
         },
@@ -123,21 +123,21 @@ export default {
         },
         resume() {
             this.editMode = false;
-            if(this.timer.enabled) {
+            if(this.reminder.enabled) {
             
-                this.activateTimer();
+                this.enableReminder();
             }
         },
-        activateTimer() {
+        enableReminder() {
             // either begin timer or set a future call
-            // this.stopTimer();
             clearInterval(this.intervalID);
             clearTimeout(this.timeoutID);
             // don't activate if not enabled
-            console.log("activateTimer - enabled: "+this.timer.enabled);
+            console.log("enableReminder - enabled: "+ this.reminder.enabled);
 
             
             let date = new Date();
+            // deals with interval option
             if (isOn(date, this.startBound, this.endBound)) {
                 this.beginTimer();
                 console.log("automatic begin!");
@@ -154,40 +154,38 @@ export default {
                                     - toMinutes(date.getHours(),date.getMinutes());
             if (this.startBound.hour < date.getHours() || this.startBound.hour == date.getHours() && this.startBound.minutes <= date.getMinutes()) {
                 // when the start bound is on the next day
-                minuteDifference += 24*60; // add 24 hours in seconds to the minute difference
+                minuteDifference += 24*60; // add 24 hours in minutes to the minute difference
             }
             let waitInSeconds = minuteDifference * 60 - date.getSeconds();
             console.log("Waiting for: " + waitInSeconds);
             // setTimeOut
             this.timeoutID = setTimeout(() => {
+                // if not interval, play audio, then set next futureTimerCall
+                // this.playaudio()
+                // if interval start the intervals
                 this.beginTimer();
             }, 1000 * waitInSeconds);
             
         },
-        // scrollToElement() {
-        //     let options = "{behavior: 'smooth'}";
-        //     this.$el.scrollIntoView(options);
-        // }
         playAudio() {
             this.alarm.muted = false;
             this.alarm.play(); // play sound
             this.alarm.onended = () => {
-                // Speak the name of the timer after alarm sound
-                let msg = new SpeechSynthesisUtterance(this.timer.name);
-                window.speechSynthesis.speak(msg);
+                // Speak the name of the reminder after alarm sound
+                let text = new SpeechSynthesisUtterance(this.reminder.name);
+                window.speechSynthesis.speak(text);
             }
         }
     },
     created() {
-        if (this.timer.enabled) {
-            this.activateTimer();
+        if (this.reminder.enabled) {
+            this.enableReminder();
         }
-        // this.$scrollTo(this.$el, 2000, {container: this.$el.parentElement});
 
-        this.editMode = this.isNew()(this.timer._id);
+        this.editMode = this.isNew()(this.reminder._id);
         // this.scrollToElement();
         console.log("Created Timer");
-        console.log("New Timer: "+ this.isNew()(this.timer._id));
+        console.log("New Timer: "+ this.isNew()(this.reminder._id));
     },
     beforeDestroy() {
         clearInterval(this.intervalID);

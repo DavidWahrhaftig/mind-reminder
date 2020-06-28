@@ -46,11 +46,11 @@ mongoose.connect(db,
 const users = require('./routes/api/users');
 app.use('/api/users', users);
 
-// Bring in the Timers route
-const timers = require('./routes/api/timers');
-app.use('/api/timers', timers);
+// Bring in the Reminders route
+const reminders = require('./routes/api/reminders');
+app.use('/api/reminders', reminders);
 
-// Bring in the Timers route
+// Bring in the Reviews route
 const reviews = require('./routes/api/reviews');
 app.use('/api/reviews', reviews);
 

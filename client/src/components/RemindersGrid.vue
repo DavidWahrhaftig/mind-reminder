@@ -2,20 +2,20 @@
     <transition-group tag="div" class="row"
         enter-active-class="animate__animated animate__jackInTheBox"
         leave-active-class="animate__animated animate__bounceOut">
-        <timer 
+        <reminder 
             class="col-12 col-md-6 col-lg-4 p-0" 
-            v-for="timer in timers" :key="timer._id"
-            :timer="timer"/>
+            v-for="reminder in reminders" :key="reminder._id"
+            :reminder="reminder"/>
     </transition-group>
 </template>
 
 <script>
-import Timer from './DailyTimer/Timer.vue';
+import Reminder from './reminder/Reminder.vue';
 // import { mapGetters } from 'vuex';
 export default {
-    props: ['timers'],
+    props: ['reminders'],
     components: {
-        Timer
+        Reminder
     }
 }
 </script>

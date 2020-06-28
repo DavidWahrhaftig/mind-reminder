@@ -1,33 +1,26 @@
 <template>
         <div class="mx-4 py-0">
             <h4 class="row">
-                <!-- Timer Name -->
-                <!-- <h5 class="col-9 p-0" style="overflow: hidden"> -->
-                {{ timer.name }}
-                <!-- </h5> -->
-                <!-- <h5 class="col-3 text-right p-0" 
-                    v-if="showTimer">
-                    {{ displayTimeRemaining }}
-                </h5> -->
+                {{ reminder.name }}
             </h4>
             <div class="row ">
-                <!-- Timer Settings -->
+                <!-- Reminder Settings -->
                 <div class="col-9">
                     <div class="row justify-content-center">
-                        From <div class="settings">{{ timer.start }}</div> 
-                        To <div class="settings">{{ timer.end }}</div> 
-                        Every <div class="settings">{{ timer.period }}</div> min
+                        From <div class="settings">{{ reminder.start }}</div> 
+                        To <div class="settings">{{ reminder.end }}</div> 
+                        Every <div class="settings">{{ reminder.period }}</div> min
                     </div>
                     <h2 class="row p-1 justify-content-center align-self-center"
                         v-if="showTimer">
                         {{ displayTimeRemaining }}
                     </h2>
                     <h4 class="row p-2 justify-content-center align-self-center"
-                        v-if="!showTimer && timer.enabled">
+                        v-if="!showTimer && reminder.enabled">
                         {{ statusMessage }}
                     </h4>
                     <h2 class="row p-2 justify-content-center align-self-center"
-                        v-if="!timer.enabled">
+                        v-if="!reminder.enabled">
                         <i class="fas fa-ban"></i>
                     </h2>
                 </div>
@@ -38,14 +31,13 @@
                         <i class="fas fa-edit"></i>
                     </button>
                     <div class="onoffswitch">
-                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" :id="`myonoffswitch${timer._id}`" tabindex="0" 
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" :id="`myonoffswitch${reminder._id}`" tabindex="0" 
                             v-model="enabled">
-                        <label class="onoffswitch-label" :for="`myonoffswitch${timer._id}`">
+                        <label class="onoffswitch-label" :for="`myonoffswitch${reminder._id}`">
                             <span class="onoffswitch-inner"></span>
                             <!-- <span class="onoffswitch-switch"></span> -->
                         </label>
                     </div>
-
                 </div>
             </div>
         </div>            
@@ -54,11 +46,11 @@
 <script>
 export default {
      props: [
-           'timer',
+           'reminder',
            'showTimer',
            'timeRemainingInSeconds',
            'index',
-           'updateTimer'
+           'updateReminder'
      ],
      data() {
          return {
@@ -73,7 +65,7 @@ export default {
         },
         statusMessage(){
             // time is on and future call is activated
-            if (this.timer.enabled) return `I'll start at ${this.timer.start}`;
+            if (this.reminder.enabled) return `I'll start at ${this.reminder.start}`;
             return `` 
         }
     },
@@ -81,7 +73,7 @@ export default {
         enabled(newValue, oldValue) {
             console.log("New Value: " + newValue);
             console.log("Old Value: " + oldValue);
-            this.updateTimer({enabled: newValue}, oldValue, newValue)
+            this.updateReminder({enabled: newValue}, oldValue, newValue)
             // if (res.data.success) {
             //     if (newValue) this.$emit('enable');
             //     else this.$emit('disable');
@@ -92,8 +84,7 @@ export default {
         }
     },
     created() {
-        console.log("Created TimerDisplay");
-        this.enabled = this.timer.enabled;
+        this.enabled = this.reminder.enabled;
     }
     
 }
