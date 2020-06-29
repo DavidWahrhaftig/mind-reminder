@@ -64,9 +64,9 @@
                 <select>
                         
                         <option :value="true">Everyday</option>
-                        <option :value="false">Weekly</option>
-                        <option :value="false">On Date</option>
-                        <option :value="false">Between Dates</option>
+                        <option :value="false" disabled>Weekly</option>
+                        <option :value="false" disabled>On Specific Date</option>
+                        <option :value="false" disabled>Between Dates</option>
                 </select>
             </div>
         </div>
@@ -190,8 +190,8 @@ export default {
 
         border: 0;
         height: 0;
-        border-top: 1px solid rgba(0, 0, 0, 0.1);
-        border-bottom: 1px solid rgba(255, 166, 0, 0.3);
+        /* border-top: 1px solid rgba(0, 0, 0, 0.1); */
+        border-bottom: 3px solid rgba(255, 166, 0, 0.3);
     }
 
     #name-edit:hover, #input-edit.input {

@@ -46,6 +46,9 @@ export default {
         }
     },
     computed: {
+        ...mapGetters([
+            'reminderTypes'
+        ]),
         startBound() {
             return {
                 hour: Number(this.reminder.start.substring(0,2)), 
@@ -138,15 +141,16 @@ export default {
             
             let date = new Date();
             // deals with interval option
-            if (isOn(date, this.startBound, this.endBound)) {
+            console.log(this.reminderTypes.INTERVAL)
+            if (this.reminder.settings.type == this.reminderTypes.INTERVAL && isOn(date, this.startBound, this.endBound)) {
                 this.beginTimer();
                 console.log("automatic begin!");
-            } else { //if (!this.activated) {
+            } else { 
                 console.log("made a future timer call");
-                this.futureTimerCall();
+                this.futureReminderCall();
             }
         },
-        futureTimerCall() {
+        futureReminderCall() {
             let date = new Date();
             this.showTimer = false;
             // calculate when timer needs to be activated
@@ -160,10 +164,15 @@ export default {
             console.log("Waiting for: " + waitInSeconds);
             // setTimeOut
             this.timeoutID = setTimeout(() => {
-                // if not interval, play audio, then set next futureTimerCall
+                // if not interval, play audio, then set next futureReminderCall
                 // this.playaudio()
                 // if interval start the intervals
-                this.beginTimer();
+                this.playAudio();
+                if(this.reminder.settings.type == this.reminderTypes.INTERVAL) {
+                    this.beginTimer();
+                } else {
+                    this.enableReminder(); // make another future call by enabling it again
+                }
             }, 1000 * waitInSeconds);
             
         },

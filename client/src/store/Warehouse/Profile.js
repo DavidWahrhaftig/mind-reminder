@@ -117,7 +117,7 @@ const actions = {
             // const minutes = ('0' + date.getMinutes() % 60).slice(-2);
             const newReminder = {
                 start: currentTime,
-                end: currentTime
+                end: currentTime,
             }
             let res = await axios.post('/api/reminders', newReminder);
             if (res.data.success) {

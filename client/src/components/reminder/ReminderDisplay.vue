@@ -1,49 +1,54 @@
 <template>
-        <div class="mx-4 py-0">
-            <h4 class="row">
-                {{ reminder.name }}
-            </h4>
-            <div class="row ">
-                <!-- Reminder Settings -->
-                <div class="col-9">
-                    <div class="row justify-content-center">
-                        From <div class="settings">{{ reminder.start }}</div> 
-                        To <div class="settings">{{ reminder.end }}</div> 
-                        Every <div class="settings">{{ reminder.period }}</div> min
+        <div class="row mx-4 py-0">
+            <div class="col-9">
+                <h4 class="row">
+                    {{ reminder.name }}
+                </h4>
+                <div class="row ">
+                    <!-- Reminder Settings -->
+                    <div class="col-12 px-0" v-if="isInterval">
+                        From <span class="settings">{{ reminder.start }}</span> 
+                        To <span class="settings">{{ reminder.end }}</span> 
+                        Every <span class="settings">{{ reminder.period }}</span> min
                     </div>
-                    <h2 class="row p-1 justify-content-center align-self-center"
+                    <div class="col-12 px-0" v-else>    
+                        Remind at <span class="settings"> {{ reminder.start }} </span>
+                    </div>
+                    
+                    <h2 class="col-12 p-1 align-self-center"
                         v-if="showTimer">
                         {{ displayTimeRemaining }}
                     </h2>
-                    <h4 class="row p-2 justify-content-center align-self-center"
-                        v-if="!showTimer && reminder.enabled">
+                    <h4 class="col-12 align-self-center"
+                        v-if="!showTimer && reminder.enabled && isInterval">
                         {{ statusMessage }}
                     </h4>
-                    <h2 class="row p-2 justify-content-center align-self-center"
+                    <h2 class="col-12"
                         v-if="!reminder.enabled">
                         <i class="fas fa-ban"></i>
                     </h2>
                 </div>
-                <!-- Edit Button and On Switch -->
-                <div class="col-3 pr-0">
-                    <button class=" row btn btn-sm btn-warning text-light m-0 mb-2 btn-block" 
-                            @click="$emit('enterEditMode')">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <div class="onoffswitch">
-                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" :id="`myonoffswitch${reminder._id}`" tabindex="0" 
-                            v-model="enabled">
-                        <label class="onoffswitch-label" :for="`myonoffswitch${reminder._id}`">
-                            <span class="onoffswitch-inner"></span>
-                            <!-- <span class="onoffswitch-switch"></span> -->
-                        </label>
-                    </div>
+            </div>
+            <!-- Edit Button and On Switch -->
+            <div class="col-3 pr-0 align-self-center">
+                <button class=" row btn btn-sm btn-warning text-light m-0 mb-2 btn-block" 
+                        @click="$emit('enterEditMode')">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <div class="onoffswitch">
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" :id="`myonoffswitch${reminder._id}`" tabindex="0" 
+                        v-model="enabled">
+                    <label class="onoffswitch-label" :for="`myonoffswitch${reminder._id}`">
+                        <span class="onoffswitch-inner"></span>
+                        <!-- <span class="onoffswitch-switch"></span> -->
+                    </label>
                 </div>
             </div>
         </div>            
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
      props: [
            'reminder',
@@ -58,6 +63,9 @@ export default {
          }
     },
     computed: {
+        ...mapGetters([
+            'reminderTypes'
+        ]),
         displayTimeRemaining() {
             let minutes = Math.floor(this.timeRemainingInSeconds / 60);
             let seconds = ('0' + this.timeRemainingInSeconds % 60).slice(-2);
@@ -67,6 +75,9 @@ export default {
             // time is on and future call is activated
             if (this.reminder.enabled) return `I'll start at ${this.reminder.start}`;
             return `` 
+        },
+        isInterval() {
+            return this.reminder.settings.type == this.reminderTypes.INTERVAL
         }
     },
     watch: {
@@ -147,8 +158,8 @@ export default {
 /* settings emphasize */
 .settings {
     font-weight: 500;
-    margin-right: 0.3em;
-    margin-left: 0.3em;
+    /* margin-right: 0.3em;
+    margin-left: 0.3em; */
     /* color: darkcyan; */
     color: #2a8599;
 }

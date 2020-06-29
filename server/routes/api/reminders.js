@@ -130,6 +130,7 @@ router.put('/', verifyToken,(req, res) => {
             console.log('updating reminder');
             // console.log(req.body);
             Reminder.findByIdAndUpdate(req.body.id, req.body.reminder, {new: true}).then(updatedReminder => {
+                console.log(updatedReminder);
                 res.status(200).json({
                     success: true,
                     reminder: updatedReminder,

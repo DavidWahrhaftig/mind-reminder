@@ -28,9 +28,10 @@ require('./config/passport')(passport);
 const db = require('./config/keys').mongoURI;
 // Run this for development "C:\Program Files\MongoDB\Server\4.2\bin\mongo.exe"
 mongoose.connect(db, 
-    { 
+    {   
+        useFindAndModify: false,
         useNewUrlParser: true, 
-        useUnifiedTopology:true 
+        useUnifiedTopology: true 
     }).then(() => {
         console.log(`Database connected successfully ${db}`);
     }).catch((err) => {
